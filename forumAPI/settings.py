@@ -127,9 +127,10 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'mongoengine.django.mongo_auth',
     'forumAPI',
     # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
+    'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
@@ -165,10 +166,4 @@ LOGGING = {
 
 import mongoengine
 mongoengine.connect(MONGO_DATABASE_NAME)
-
-if mongoengine.VERSION >= (0, 8, 0):
-    AUTH_USER_MODEL = 'mongo_auth.MongoUser'
-    INSTALLED_APPS = (
-        'mongoengine.django.mongo_auth',
-    ) + INSTALLED_APPS
 
