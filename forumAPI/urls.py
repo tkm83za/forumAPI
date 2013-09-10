@@ -1,24 +1,16 @@
-from forumAPI.api import TopicResource
+from django.conf.urls.defaults import *
+from tastypie.api import Api
+from forumAPI.api import TopicResource, CommentResource, UserResource, AdminUserResource
 
-topic_resource = TopicResource()
+v1_api = Api(api_name='v1')
+v1_api.register(TopicResource())
+v1_api.register(CommentResource())
+v1_api.register(UserResource())
+v1_api.register(AdminUserResource())
 
 
-from django.conf.urls import patterns, include, url
-
-# Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
-# admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'forumAPI.views.home', name='home'),
-    # url(r'^forumAPI/', include('forumAPI.foo.urls')),
-    #  url(r'^api/v0', include('forumAPI.api.urls')),
-    (r'^api/', include(topic_resource.urls)),
-
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
-    # url(r'^admin/', include(admin.site.urls)),
+    # The normal jazz here...
+    (r'^api/', include(v1_api.urls)),
 )
