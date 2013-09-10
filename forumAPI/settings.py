@@ -21,7 +21,7 @@ DATABASES = {
     }
 }
 
-MONGO_DATABASE_NAME = 'test_project'
+MONGO_DATABASE_NAME = 'forum'
 
 
 AUTHENTICATION_BACKENDS = (
