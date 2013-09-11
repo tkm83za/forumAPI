@@ -1,0 +1,28 @@
+{% load i18n %}
+  <form class="form-horizontal{% if compact %} compact-sign-up-form{% endif %}" method="post" action="/register/">{% csrf_token %}
+    <fieldset>
+      <div id="legend" class="">
+        <legend class="">{% trans "Sign up" %}</legend>
+      </div>
+        {{ form.non_field_errors }}
+        {% for field in form %}
+    <div class="control-group{%if field.errors %} error{% endif %}">
+          <!-- Text input-->
+          <label class="control-label" for="{{ field.name }}">{{ field.label_tag }}</label>
+          <div class="controls">
+            {{ field }} {{ field.errors }}
+            {% if mobile %} <p class="help-block">{{ field.help_text }}</p> {% endif %}
+          </div>
+        </div>
+    {% endfor %}
+
+        <div class="control-group">
+
+          <!-- Button -->
+          <div class="controls">
+            <button class="btn btn-primary">{% trans 'Register' %}</button>
+
+          </div>
+        </div>
+        </fieldset>
+  </form>
