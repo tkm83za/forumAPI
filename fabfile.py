@@ -13,6 +13,7 @@ def setup_new():
     """
     sudo("mkdir -p /var/www/static")
     sudo("mkdir -p /var/www/media")
+    sudo("chmod g+w -R /var/www")
     sudo("usermod -G www-data ubuntu")
     sudo("chown www-data /var/www/static")
     sudo("chgrp www-data /var/www/static")
