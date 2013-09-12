@@ -75,6 +75,9 @@ STATIC_ROOT = '/var/www/static'
 STATIC_URL = '/static/'
 
 import os
+
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+
 # Additional locations of static files
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
@@ -82,7 +85,7 @@ STATICFILES_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
     #"/tmp/static",
     #'/home/tapiwa/code/python/forumAPI/static',
-    os.path.join(os.path.abspath(os.path.dirname(__file__)), "/static"),
+    os.path.join(PROJECT_ROOT, "/static"),
 )
 
 # List of finder classes that know how to find static files in
