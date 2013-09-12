@@ -85,7 +85,7 @@ STATICFILES_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
     #"/tmp/static",
     #'/home/tapiwa/code/python/forumAPI/static',
-    os.path.join(PROJECT_ROOT, "static"),
+    os.path.join(PROJECT_ROOT, "../static"),
 )
 
 # List of finder classes that know how to find static files in
