@@ -3,25 +3,25 @@
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+API_PATH = "/api/v1"
+API_HOST = "http://localhost"
+API_PORT = "8000"
+
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
 
 MANAGERS = ADMINS
 
+MONGO_DATABASE_NAME = 'forum'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '/home/tapiwa/code/python/forumAPI/forumAPI/sqlite.db',                      # Or path to database file if using sqlite3.
-        # The following settings are not used with sqlite3:
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        'PORT': '',                      # Set to empty string for default.
+        'NAME': MONGO_DATABASE_NAME,                      # Or path to database file if using sqlite3.
     }
 }
 
-MONGO_DATABASE_NAME = 'forum'
 
 
 AUTHENTICATION_BACKENDS = (
@@ -68,17 +68,21 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = ''
+STATIC_ROOT = '/var/www/static'
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
 STATIC_URL = '/static/'
 
+import os
 # Additional locations of static files
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    #"/tmp/static",
+    '/home/tapiwa/code/python/forumAPI/static',
+    os.path.join(os.path.abspath(os.path.dirname(__file__)), "/static"),
 )
 
 # List of finder classes that know how to find static files in
@@ -118,6 +122,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    #os.path.join(os.path.dirname(__file__), 'templates'),
 )
 
 INSTALLED_APPS = (
@@ -129,11 +134,15 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'mongoengine.django.mongo_auth',
     'forumAPI',
+    'forumSite',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
+AUTH_USER_MODEL = 'mongo_auth.MongoUser'
+
+SESSION_ENGINE = 'mongoengine.django.sessions'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
