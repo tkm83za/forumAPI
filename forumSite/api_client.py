@@ -1,11 +1,18 @@
 import requests
 import logging
 import json
-#from django.conf import settings 
-settings = {}
-API_PATH = settings.get('API_PATH', "/api/v1")
-API_HOST = settings.get('API_HOST', "http://localhost")
-API_PORT = settings.get('API_PORT', "8000")
+from django.conf import settings 
+#settings = {}
+
+DEFAULTS = {'API_PATH': "/api/v1",
+            'API_HOST': "http://localhost",
+            'API_PORT': "8000"}
+if not settings.configured:
+    settings.configure(DEFAULTS, DEBUG=False)
+    
+API_PATH = settings.API_PATH
+API_HOST = settings.API_HOST
+API_PORT = settings.API_PORT
 
 REQUEST_METHODS = {"PUT": requests.put,
                    "POST": requests.post,
