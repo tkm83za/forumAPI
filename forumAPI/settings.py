@@ -179,3 +179,7 @@ LOGGING = {
 import mongoengine
 mongoengine.connect(MONGO_DATABASE_NAME)
 
+try:
+    import local_settings.py
+except ImportError:
+    pass
