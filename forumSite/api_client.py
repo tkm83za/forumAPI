@@ -6,7 +6,7 @@ from django.conf import settings
 
 DEFAULTS = {'API_PATH': "/api/v1",
             'API_HOST': "http://localhost",
-            'API_PORT': "8000"}
+            'API_PORT': "80"}
 if not settings.configured:
     settings.configure(DEFAULTS, DEBUG=False)
     
