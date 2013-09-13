@@ -5,7 +5,7 @@ TEMPLATE_DEBUG = DEBUG
 
 API_PATH = "/api/v1"
 API_HOST = "http://localhost"
-API_PORT = "8000"
+API_PORT = "80"
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
