@@ -12,7 +12,7 @@ from django.forms.models import modelformset_factory
 from django.forms.formsets import formset_factory
 from django.contrib import messages
 
-from forms import SignupForm
+from forms import SignupForm, TopicForm
 
 logger = logging.getLogger(__name__)
 
@@ -30,6 +30,21 @@ def signup(request):
     else:
         form = SignupForm()
     return render(request, 'forum/signup.html', {"form": form})
+
+def topic(request):
+    user = request.user
+    form = None
+    if request.method == 'POST':
+        form = TopicForm(request.POST)
+        if form.is_valid() and form.save():
+            redirect('/')
+        elif form.is_valid():
+            form.non_field_errors = "Failed to save"
+        else:
+            form.non_field_errors = 'form is not valid'
+    else:
+        form = TopicForm()
+    return render(request, 'forum/form.html', {"form": form})
 
 
 def index(request):

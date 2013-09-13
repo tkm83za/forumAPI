@@ -1,17 +1,20 @@
 {% extends "base.html" %}
-{% block title %}Sign up{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {% if errror %}
 {% endif %}
 {% block content %}
 {% load i18n %}
-  <form class="form-horizontal " method="post" action="/register/">{% csrf_token %}
+  <form class="form-horizontal " method="post" >{% csrf_token %}
+    {% for hidden in form.hidden_fields %}
+    {{ hidden }}
+    {% endfor %}
     <fieldset>
       <div id="legend" class="">
-        <legend class="">{% trans "Sign up" %}</legend>
+        <legend class="">{{ title }}</legend>
       </div>
         {{ form.non_field_errors }}
-        {% for field in form %}
+        {% for field in form.visible_fields %}
     <div class="control-group{%if field.errors %} has-error{% endif %}">
           <!-- Text input-->
           <label class="control-label" for="{{ field.name }}">{{ field.label_tag }}</label>
@@ -26,7 +29,7 @@
 
           <!-- Button -->
           <div class="controls">
-            <button class="btn btn-primary">{% trans 'Register' %}</button>
+            <button class="btn btn-primary">Submit</button>
 
           </div>
         </div>

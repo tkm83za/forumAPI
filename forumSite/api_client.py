@@ -21,18 +21,22 @@ REQUEST_METHODS = {"PUT": requests.put,
                    "GET": requests.get}
 HEADERS = {'content-type': 'application/json'}
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("forumSite.forms")
 
 def save(form, method=None):
     url = "{}:{}{}/{}".format(API_HOST, API_PORT, API_PATH, form.Meta.api_path)
     payload = form.to_dict()
+
     if method == None:
         if payload.get('id', False):
             method = "PUT"
         else:
             method = "POST"
+    logger.error("%s: %s, %s" % (method, url, json.dumps(payload)))
     if not REQUEST_METHODS[method]:
+        logger.debug("Exception raised!")
         raise Exception("Invalid reequest method: %s" % method)
+
     logger.debug("%s: %s" % (method, url))
     return REQUEST_METHODS[method](url, data=json.dumps(payload), headers=HEADERS)
 

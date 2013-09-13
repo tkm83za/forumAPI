@@ -27,8 +27,6 @@ class TopicResource(resources.MongoEngineResource):
         allowed_methods = ('get', 'post', 'put', 'patch', 'delete') #TODO: own submission auth
         authorization = authorization.Authorization()
 
-    comments = tastypie.fields.ToManyField(CommentResource, 'comments')
-
     def prepend_urls(self):
         return [
             url(r"^(?P<resource_name>%s)/(?P<pk>\w[\w/-]*)/comments%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_comments'), name="api_get_comments"),
