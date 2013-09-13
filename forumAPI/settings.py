@@ -4,7 +4,7 @@ DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 API_PATH = "/api/v1"
-API_HOST = "http://localhost"
+API_HOST = "http://public.redactor.co.za"
 API_PORT = "80"
 
 ADMINS = (
@@ -196,9 +196,5 @@ mongoengine.connect(MONGO_DATABASE_NAME)
 
 try:
     from settings_local import *
-except ImportError:
-    pass
-try:
-    from forumAPI.settings_local import *
 except ImportError:
     pass
