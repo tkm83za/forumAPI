@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Activation complete" %}{% endblock %}
+{% block content %}
+<h2>{% trans "Activation Successful" %}</h2>
+<p>{% blocktrans %}Activation complete! Your account is now active{% endblocktrans %}</p>
+<p>{% blocktrans %}You may now <a href="/account/login/">sign in</a>.{% endblocktrans %}</p>
+{% endblock %}    <head>

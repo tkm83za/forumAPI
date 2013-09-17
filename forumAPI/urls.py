@@ -18,6 +18,7 @@ v1_api.register(AdminUserResource())
 
 
 urlpatterns = patterns('',
+    (r'^accounts/', include('registration.urls')),
     (r'^api/', include(v1_api.urls)),
     ('^admin/', include(admin.site.urls)),
     (r'^static/', 'django.views.static.serve', {'document_root' : 'forumAPI/static', 'show_indexes' : True}),

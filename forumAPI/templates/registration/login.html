@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+{% if error_message %}
+<p class="errornote">{{ error_message }}</p>
+{% endif %}
+{% include "login_form_snippet.html" %}
+<script type="text/javascript">
+document.getElementById('id_username').focus()
+</script>
+{% endblock %}

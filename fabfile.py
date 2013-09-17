@@ -21,8 +21,8 @@ def setup_new():
     sudo("chgrp www-data /var/www/media")
     sudo("apt-get install -y libxml2-dev libxslt-dev git-core "
          "nginx mongodb python-setuptools build-essential python-dev python-virtualenv")
-    with cd("/home/ubuntu/git"):
-        run("git clone https://github.com/tkm83za/forumAPI.git forumAPI")
+#     with cd("/home/ubuntu/git"):
+#         run("git clone https://github.com/tkm83za/forumAPI.git forumAPI")
     run("virtualenv /home/ubuntu/virtualenv")
     put("build/nginx.conf", "/etc/nginx/sites-available/public.redactor.co.za", use_sudo=True)
     put("build/uwsgi.conf", "/etc/init/uwsgi.conf", use_sudo=True)    
@@ -30,6 +30,8 @@ def setup_new():
     sudo("rm -f /etc/nginx/sites-enabled/default")
     with prefix('source /home/ubuntu/virtualenv/bin/activate'):
          with cd("/home/ubuntu/git/forumAPI/lib/django-tastypie-mongoengine/"):
+             run("python setup.py install")
+         with cd("/home/ubuntu/git/forumAPI/lib/registration/"):
              run("python setup.py install")
 
 

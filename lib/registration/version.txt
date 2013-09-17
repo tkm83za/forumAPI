@@ -1,0 +1,2 @@
+checked out from https://github.com/lig/django-registration-me.git
+f8a87fc73a5ab119d7900510c09e02ab8ed85952
