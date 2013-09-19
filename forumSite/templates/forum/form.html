@@ -1,11 +1,12 @@
 {% extends "base.html" %}
+{% load add_class %}
 {% block title %}{{ title }}{% endblock %}
 
 {% if errror %}
 {% endif %}
 {% block content %}
 {% load i18n %}
-  <form class="form-horizontal " method="post" >{% csrf_token %}
+  <form class="form-vertical " method="post" >{% csrf_token %}
     {% for hidden in form.hidden_fields %}
     {{ hidden }}
     {% endfor %}
@@ -15,11 +16,11 @@
       </div>
         {{ form.non_field_errors }}
         {% for field in form.visible_fields %}
-    <div class="control-group{%if field.errors %} has-error{% endif %}">
+    <div class="form-group row{%if field.errors %} has-error{% endif %}">
           <!-- Text input-->
-          <label class="control-label" for="{{ field.name }}">{{ field.label_tag }}</label>
-          <div class="controls">
-            {{ field }} {{ field.errors }}
+          <label class="control-label col-lg-2" for="{{ field.name }}">{{ field.label_tag }}</label>
+          <div class="controls col-lg-10">
+            {{ field|add_class:"form-control" }} {{ field.errors }}
             {% if mobile %} <p class="help-block">{{ field.help_text }}</p> {% endif %}
           </div>
         </div>

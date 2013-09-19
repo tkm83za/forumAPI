@@ -75,8 +75,8 @@ class TopicForm(ApiForm):
 
     _logger = logging.getLogger(__name__)
 
-    name = forms.CharField(max_length=50, required=True)
-    blurb = forms.CharField(max_length=50, required=False)
+    name = forms.CharField(max_length=50, required=True, label="Topic")
+    blurb = forms.CharField(max_length=50, required=False, widget=forms.Textarea, label="Summary")
     id = forms.CharField(widget=forms.HiddenInput, required=False)
 
     def to_dict(self):

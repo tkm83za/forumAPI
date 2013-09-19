@@ -29,8 +29,9 @@ def signup(request):
             form.non_field_errors = 'form is not valid'
     else:
         form = SignupForm()
-    return render(request, 'forum/signup.html', {"form": form})
+    return render(request, 'registration/registration_form.html', {"form": form})
 
+@login_required
 def topic(request):
     user = request.user
     form = None
