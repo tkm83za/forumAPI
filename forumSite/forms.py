@@ -97,7 +97,7 @@ class CommentForm(ApiForm):
     _logger = logging.getLogger(__name__)
 
     topic = forms.CharField(max_length=500, required=True, widget=forms.HiddenInput)
-    comment_body = forms.CharField(max_length=50, required=True, widget=forms.Textarea, label="Comment")
+    comment_body = forms.CharField(required=True, widget=forms.Textarea, label="Comment")
     
     in_reply_to = forms.CharField(widget=forms.HiddenInput, required=False)
 
