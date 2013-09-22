@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load add_class %}
+{% block title %}{{ title }}{% endblock %}
+
+{% if errror %}
+{% endif %}
+{% block content %}
+{% autoescape on %}
+<div class="row">
+<h1>{{topic.name}}</h1>
+<p>{{topic.blurb}}</p>
+</div>
+<div class="comments">
+    <legend>Comments</legend>
+    {%for comment in comments%}
+    <div class="well well-sm col-sm-offset-{{comment.nesting_level}}">
+        {%if comment.hidden %}
+        This comment has been hidden by a moderator
+        {%else%}
+        <div class="row"><span class="author col-lg-2 ">{{comment.author}}</span><br/></div> 
+        <div class="row"><div class="col-lg-12">{{comment.comment_body}}</div></div>
+        {% if user.is_authenticated %}
+        <div class="row">
+            <div class="col-lg-1"><a class="replylink" href="#" rel="{{comment.id}}"> Reply</a></div>
+          {%if user.is_admin %}
+                <div class="col-lg-1"><a class="flaglink" href="#" rel="{{comment.id}}"> Hide this comment</a></div>
+          {% endif %}
+        </div>
+        {% endif %}
+        {%endif%}        
+    </div>
+    {% empty %}
+    There are no comments yet. Be the first
+    {% endfor %}
+    
+  {% if user.is_authenticated %}
+  <form class="form-vertical " method="post" >{% csrf_token %}
+    {% for hidden in form.hidden_fields %}
+    {{ hidden }}
+    {% endfor %}
+    <fieldset>
+        {{ form.non_field_errors }}
+        {% for field in form.visible_fields %}
+    <div class="form-group row{%if field.errors %} has-error{% endif %}">
+          <label class="control-label col-lg-1" for="{{ field.name }}">{{ field.label_tag }}</label>
+          <div class="controls col-lg-11">
+            {{ field|add_class:"form-control" }} {{ field.errors }}
+            {% if mobile %} <p class="help-block">{{ field.help_text }}</p> {% endif %}
+          </div>
+        </div>
+    {% endfor %}
+        <div class="control-group">
+
+          <!-- Button -->
+          <div class="controls">
+            <button class="btn btn-primary">Submit</button>
+
+          </div>
+        </div>
+    </fieldset>
+  </form>
+  {% else %}
+  {% trans "You need to be logged in to post a comment" %}
+  {% endif %}
+</div>
+{% endautoescape %}
+{%endblock%}
+{% block javascript %}
+<script type="text/javascript">
+$(document).ready(function(){
+    $('.replylink').click(function(){
+//        alert($(this).attr('rel'));
+        $('#id_in_reply_to').val($(this).attr('rel'));
+        $("body").animate({
+         scrollTop: $('#id_comment_body').offset().top
+        }, 300);
+        $('#id_comment_body').focus();
+    });
+});
+</script>
+{%endblock%}

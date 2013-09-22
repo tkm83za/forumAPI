@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load add_class %}
+{% block title %}{{ title }}{% endblock %}
+
+{% if errror %}
+{% endif %}
+{% block content %}
+{% autoescape on %}
+{%for topic in topics%}
+<div class="row">
+<a href="/topic/{{topic.id}}/"><h1>{{topic.name}}</h1></a>
+<p>{{topic.blurb}}</p>
+</div>
+{% empty %}
+There are currently no topics to browse
+{% endfor %}
+{% endautoescape %}
+{%endblock%}

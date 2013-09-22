@@ -20,6 +20,9 @@ class CommentResource(resources.MongoEngineResource):
         allowed_methods = ('get', 'post', 'put', 'patch', 'delete')
         authorization = authorization.Authorization() #TODO: own-submission authorization, allow admin to put/patch
         exclude = ['topic']
+        filtering = {"topic": [ "exact", ],
+                     "author": ["exact", ],
+                      }
 
 class TopicResource(resources.MongoEngineResource):
     class Meta:
@@ -33,16 +36,12 @@ class TopicResource(resources.MongoEngineResource):
         ]
 
     def get_comments(self, request, **kwargs):
-        try:
-            basic_bundle = self.build_bundle(request=request)
-            obj = self.cached_obj_get(bundle=basic_bundle, **self.remove_api_resource_names(kwargs))
-        except ObjectDoesNotExist:
-            return tastypie.http.HttpGone("What")
-        except mongoengine.MultipleObjectsReturned:
-            return tastypie.http.HttpMultipleChoices("More than one resource is found at this URI.")
 
         comment_resource = CommentResource()
-        return comment_resource.get_detail(request, topic=obj.pk)
+        try:
+            return comment_resource.get_list(request, topic=kwargs.get('pk', -1))
+        except (mongoengine.errors.ValidationError):
+            return tastypie.http.HttpNotFound()
 
 class UserResource(resources.MongoEngineResource):
     class Meta:

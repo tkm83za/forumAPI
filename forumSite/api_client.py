@@ -23,9 +23,9 @@ HEADERS = {'content-type': 'application/json'}
 
 logger = logging.getLogger("forumSite.forms")
 
-def save(form, method=None):
+def save(form, method=None, request=None):
     url = "{}:{}{}/{}".format(API_HOST, API_PORT, API_PATH, form.Meta.api_path)
-    payload = form.to_dict()
+    payload = form.to_dict(request=request)
 
     if method == None:
         if payload.get('id', False):
@@ -40,9 +40,15 @@ def save(form, method=None):
     logger.debug("%s: %s" % (method, url))
     return REQUEST_METHODS[method](url, data=json.dumps(payload), headers=HEADERS)
 
-def get(form, params=None):
-    url = "{}:{}{}/{}".format(API_HOST, API_PORT, API_PATH, form.Meta.api_path)
-    logger.debu("GET: %s" % url)
-    resp = requests.get(url, params)
-    data = json.load(resp)
+def get(form, sub_url=None):
+    if not sub_url:
+        url = "{}:{}{}/{}".format(API_HOST, API_PORT, API_PATH, form.Meta.api_path)
+        if form.initial.get('id', None) is not None:
+            url = "{}:{}{}/{}{}/".format(API_HOST, API_PORT, API_PATH, form.Meta.api_path, form.initial['id'])
+            pass
+    else:
+        url = "{}:{}{}/{}".format(API_HOST, API_PORT, API_PATH, sub_url)
+    logger.debug("GET: %s" % url)
+    resp = requests.get(url)
+    data = resp.json()
     return data

@@ -16,15 +16,16 @@ def _drop_empty_id(my_vals):
     return my_vals
 
 class ApiForm(forms.Form):
-    id = forms.CharField(widget=forms.HiddenInput)
+    id = forms.CharField(widget=forms.HiddenInput, required=False)
 
-    def save(self):
+    def save(self, request=None):
         try:
-            res = api_client.save(self)
+            res = api_client.save(self, request=request)
             res.raise_for_status()
         except (requests.exceptions.HTTPError) as err:
             logger.error(err)
-            return False
+            raise err
+#            return False
         return True
 
 class UserForm(ApiForm):
@@ -36,7 +37,7 @@ class SignupForm(UserForm):
     
     class Meta(UserForm.Meta):
         fields = ('email', 'first_name')
-    def to_dict(self):
+    def to_dict(self, request=None):
         my_vals = {
                     'email': self.cleaned_data.get('email', ''),
                     'first_name': self.cleaned_data.get('first_name', ''),
@@ -79,7 +80,7 @@ class TopicForm(ApiForm):
     blurb = forms.CharField(max_length=50, required=False, widget=forms.Textarea, label="Summary")
     id = forms.CharField(widget=forms.HiddenInput, required=False)
 
-    def to_dict(self):
+    def to_dict(self, request=None):
         my_vals = {
                     'name': self.cleaned_data.get('name', None),
                     'blurb': self.cleaned_data.get('blurb', None),
@@ -100,13 +101,26 @@ class CommentForm(ApiForm):
     
     in_reply_to = forms.CharField(widget=forms.HiddenInput, required=False)
 
-    def to_dict(self):
+    def clean_topic(self):
+        data = self.cleaned_data['topic']
+        if data:
+            return "{}/{}/{}/".format(api_client.API_PATH, 'topic', data)
+        else:
+            raise forms.ValidationError("No topic specified")
+    
+    def clean_in_reply_to(self):
+        data = self.cleaned_data['in_reply_to']
+        if not data:
+            return None
+        else:
+            return data
+
+    def to_dict(self, request=None):
         my_vals = {
                     'topic': self.cleaned_data.get('topic', None),
                     'in_reply_to': self.cleaned_data.get('in_reply_to', None),
                     'comment_body': self.cleaned_data.get('comment_body', None),
+                    'author': request.user.username,
                     'id': self.cleaned_data.get('id', None)
                   }
         return _drop_empty_id(my_vals)
-
-

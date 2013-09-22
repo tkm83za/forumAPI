@@ -20,6 +20,9 @@
             .errorlist {
                 display: inline-block;
             }
+            .author {
+                font-weight: bold;
+            }
         </style>  
 <!--
         <link rel="stylesheet" href="{% static "css/bootstrap.min.css"%}">
@@ -53,11 +56,17 @@
             <li class="dropdown">
               <a href="/topics" class="dropdown-toggle" data-toggle="dropdown">Topics <b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li><a href="/submit/topic">See latest Topics</a></li>
+                <li><a href="/topics/">See latest Topics</a></li>
                 <li><a href="/submit/topic">Submit new Topic</a></li>
             </ul>
             </li>
           </ul>
+          {% if user.is_authenticated %}
+          <ul class="navbar-right">
+          <li>{{user.username}}</li>
+          <li><a class="btn btn-primary" href="/accounts/logout/">Logout</a></li>
+          </ul>
+          {% else %}
           <form class="navbar-form navbar-right" action="/accounts/login/" method="post">
               {%  csrf_token %}
             <div class="form-group">
@@ -69,6 +78,7 @@
             <button type="submit" class="btn btn-success">Sign in</button>
             <a class="btn btn-primary" href="/register/">Register</a>
           </form>
+          {% endif %}
         </div><!--/.navbar-collapse -->
       </div>
     </div>
@@ -111,5 +121,6 @@
             g.src='//www.google-analytics.com/ga.js';
             s.parentNode.insertBefore(g,s)}(document,'script'));
         </script>
+        {% block javascript %}{% endblock %}
     </body>
 </html>

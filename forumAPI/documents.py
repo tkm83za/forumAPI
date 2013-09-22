@@ -18,6 +18,7 @@ class User(mongoengine.Document):
     is_admin = mongoengine.BooleanField()
     first_name = mongoengine.StringField(max_length=50)
     last_name = mongoengine.StringField(max_length=50)
+    username = mongoengine.StringField(max_length=50)
 
 class Topic(InheritableDocument):
     author = mongoengine.ReferenceField(User, dbref=False)
@@ -26,7 +27,7 @@ class Topic(InheritableDocument):
 
 class Comment(InheritableDocument):
     topic = mongoengine.ReferenceField(Topic, required=True, reverse_delete_rule=mongoengine.CASCADE, dbref=False)
-    author = mongoengine.ReferenceField(User, reverse_delete_rule=mongoengine.NULLIFY, dbref=False)
+    author = mongoengine.StringField(max_length=50, required=False)
     in_reply_to = mongoengine.StringField(max_length=50)#mongoengine.ReferenceField(Comment)
     comment_body = mongoengine.StringField(required=True)
     is_hidden = mongoengine.BooleanField()
