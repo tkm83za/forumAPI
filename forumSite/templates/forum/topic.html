@@ -15,8 +15,8 @@
     <legend>Comments</legend>
     {%for comment in comments%}
     <div class="well well-sm col-sm-offset-{{comment.nesting_level}}">
-        {%if comment.hidden %}
-        This comment has been hidden by a moderator
+        {%if comment.is_hidden %}
+        <div class="hidden-comment">This comment has been hidden by a moderator</div>
         {%else%}
         <div class="row"><span class="author col-lg-2 ">{{comment.author}}</span><br/></div> 
         <div class="row"><div class="col-lg-12">{{comment.comment_body}}</div></div>
