@@ -22,9 +22,14 @@
         <div class="row"><div class="col-lg-12">{{comment.comment_body}}</div></div>
         {% if user.is_authenticated %}
         <div class="row">
-            <div class="col-lg-1"><a class="replylink" href="#" rel="{{comment.id}}"> Reply</a></div>
-          {%if user.is_admin %}
-                <div class="col-lg-1"><a class="flaglink" href="#" rel="{{comment.id}}"> Hide this comment</a></div>
+            {% if comment.author == user.username %}
+              <div class="col-lg-4"><a class="editlink btn btn-sm" href="/comment/{{comment.id}}/"><span class="glyphicon glyphicon-edit"></span> Edit Comment</a>
+              &nbsp;<a class="deletelink btn btn-sm" href="/comment/{{comment.id}}/delete/"><span class="glyphicon glyphicon-trash"></span> Delete Comment</a></div>
+            {% else %}
+              <div class="col-lg-1"><a class="replylink btn btn-sm" href="#" rel="{{comment.id}}"><span class="glyphicon glyphicon-comment"></span> Reply</a></div>
+            {% endif %}
+          {%if user.is_staff %}
+                <div class="col-lg-2"><a class="flaglink btn btn-sm" href="#" rel="{{comment.id}}"><span class="glyphicon glyphicon-eye-close"></span> Hide this comment</a></div>
           {% endif %}
         </div>
         {% endif %}
