@@ -89,7 +89,7 @@ class RegistrationForm(forms.Form):
         supplied.
 
         """
-        new_user = RegistrationProfile.create_inactive_user(
+        new_user = RegistrationProfile.create_active_user(
             username=self.cleaned_data['username'],
             password=self.cleaned_data['password1'],
             email=self.cleaned_data['email'])
