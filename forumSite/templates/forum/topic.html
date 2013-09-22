@@ -13,28 +13,36 @@
 </div>
 <div class="comments">
     <legend>Comments</legend>
-    {%for comment in comments%}
+    {%for key, comment_item in comments.items%}
+    {%with comment_item.value as comment%}
     <div class="well well-sm col-sm-offset-{{comment.nesting_level}}">
         {%if comment.is_hidden %}
         <div class="hidden-comment">This comment has been hidden by a moderator</div>
         {%else%}
-        <div class="row"><span class="author col-lg-2 ">{{comment.author}}</span><br/></div> 
+        <div class="row"><span class="col-lg-4"><span class="author">{{comment.author}}</span>&nbsp; {{ comment.created }}</span></div> 
+        <div class="row">&nbsp;</div>
         <div class="row"><div class="col-lg-12">{{comment.comment_body}}</div></div>
         {% if user.is_authenticated %}
         <div class="row">
+            <div class="col-lg-1"><a class="replylink btn btn-sm" href="#" rel="{{comment.id}}"><span class="glyphicon glyphicon-comment"></span> Reply</a></div>
+
             {% if comment.author == user.username %}
               <div class="col-lg-4"><a class="editlink btn btn-sm" href="/comment/{{comment.id}}/"><span class="glyphicon glyphicon-edit"></span> Edit Comment</a>
-              &nbsp;<a class="deletelink btn btn-sm" href="/comment/{{comment.id}}/delete/"><span class="glyphicon glyphicon-trash"></span> Delete Comment</a></div>
-            {% else %}
-              <div class="col-lg-1"><a class="replylink btn btn-sm" href="#" rel="{{comment.id}}"><span class="glyphicon glyphicon-comment"></span> Reply</a></div>
+              &nbsp;<a class="deletelink btn btn-sm" rel="{{comment.id}}"><span class="glyphicon glyphicon-trash"></span> Delete Comment</a></div>
             {% endif %}
           {%if user.is_staff %}
-                <div class="col-lg-2"><a class="flaglink btn btn-sm" href="#" rel="{{comment.id}}"><span class="glyphicon glyphicon-eye-close"></span> Hide this comment</a></div>
+                <div class="col-lg-2"><a class="hidelink btn btn-sm" href="#" rel="{{comment.id}}"><span class="glyphicon glyphicon-eye-close"></span> Hide this comment</a></div>
           {% endif %}
         </div>
         {% endif %}
-        {%endif%}        
+        {%endif%}
+        {%for node in comment_item.children%}
+        {% with node as comment_item %}
+        {% include 'forum/comment.html' %}
+        {%endwith%}
+        {%endfor%}     
     </div>
+    {% endwith%}
     {% empty %}
     There are no comments yet. Be the first
     {% endfor %}
@@ -69,18 +77,34 @@
   {% trans "You need to be logged in to post a comment" %}
   {% endif %}
 </div>
+<form id="hiddenform" method="post" action="">{%csrf_token%}
+<input type="hidden" name="topic" value="{{topic.id}}" />
+</form>
 {% endautoescape %}
 {%endblock%}
 {% block javascript %}
 <script type="text/javascript">
 $(document).ready(function(){
     $('.replylink').click(function(){
-//        alert($(this).attr('rel'));
         $('#id_in_reply_to').val($(this).attr('rel'));
         $("body").animate({
          scrollTop: $('#id_comment_body').offset().top
         }, 300);
         $('#id_comment_body').focus();
+    });
+    $('.deletelink').click(function(){
+        if (!confirm("Are you sure you want to delete the comment?")){
+            return false;
+        }
+        $('#hiddenform').prop('action', '/comment/' + $(this).prop('rel') + '/delete/');
+        $('#hiddenform').submit();
+    });
+    $('.hidelink').click(function(){
+        if (!confirm("Are you sure you want to hide the comment?")){
+            return false;
+        }
+        $('#hiddenform').prop('action', '/comment/' + $(this).prop('rel') + '/hide/');
+        $('#hiddenform').submit();
     });
 });
 </script>

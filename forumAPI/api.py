@@ -11,6 +11,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 class CommentResource(resources.MongoEngineResource):
     topic =  fields.ReferenceField(to='forumAPI.api.TopicResource', attribute='topic', full=False)
+#    creation = fields.()
     
 #     def dehydrate_topic(self, bundle):
 #             bundle.data['topic'] = documents.Topic.objects(__raw__ = {_id:bundle.data['topic']}).first()
@@ -23,6 +24,11 @@ class CommentResource(resources.MongoEngineResource):
         filtering = {"topic": [ "exact", ],
                      "author": ["exact", ],
                       }
+    def dehydrate_created(self, bundle):
+        import calendar
+        d2 = bundle.obj.id.generation_time
+        return d2.strftime("%c")
+        
 
 class TopicResource(resources.MongoEngineResource):
     class Meta:
@@ -39,7 +45,7 @@ class TopicResource(resources.MongoEngineResource):
 
         comment_resource = CommentResource()
         try:
-            return comment_resource.get_list(request, topic=kwargs.get('pk', -1))
+            return comment_resource.get_list(request, topic=kwargs.get('pk', -1), order_by=['-creation'])
         except (mongoengine.errors.ValidationError):
             return tastypie.http.HttpNotFound()
 

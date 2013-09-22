@@ -14,6 +14,7 @@ from django.contrib import messages
 
 from forms import SignupForm, TopicForm, CommentForm
 from forumSite import api_client
+from django.http.response import HttpResponse
 
 logger = logging.getLogger(__name__)
 
@@ -57,7 +58,23 @@ def topic(request, id=None):
     except (Exception) as err:
         message = "Failed to retrieve topic and/or comments"
     
-    return render(request, 'forum/topic.html', {'topic': topic, 'comments': comments['objects'], 'form': comment_form})
+    new_comments = {}
+    class node():
+        def __init__(self, value):
+            self.value = value
+            self.children = []
+    
+        def add_child(self, obj):
+            self.children.append(obj)
+           
+    nodes = dict((e["id"], node(e)) for e in comments['objects'])
+    for e in comments['objects']:
+        if e["in_reply_to"]:
+            if not nodes.get(e["in_reply_to"], False):
+                nodes[e["in_reply_to"]] = node({"is_hidden": True})
+            nodes[e["in_reply_to"]].add_child(nodes[e["id"]])
+            
+    return render(request, 'forum/topic.html', {'topic': topic, 'comments': nodes, 'form': comment_form})
     
 @login_required
 def newtopic(request):
@@ -81,28 +98,36 @@ def edit_comment(request, id):
         comment_form = CommentForm(request.POST, initial={'id': id})
         payload = {'comment_body': request.POST['comment_body']}
         if api_client.save(comment_form, method='PATCH', payload=payload):
-            redirect('/')
+            return redirect('/topic/' + request.POST.get('topic', "-empty-") + "/")
         else:
             message = "Failed ot save comment"
     skeleton = CommentForm(initial={'id': id})
     comment = api_client.get(skeleton)
-    comment_form = CommentForm(initial={'comment_body':comment['comment_body']})
-    return render(request, 'forum/form.html', {'form': comment_form})
+    comment_form = CommentForm(initial={'comment_body':comment['comment_body'],
+                                        'topic': comment['topic'].split("/")[-2]})
+    return render(request, 'forum/form.html', {'form': comment_form, 'title': 'Edit Comment'})
     
 @login_required
 def delete_comment(request, id):
-    pass
+    if request.POST:
+        comment_form = CommentForm(initial={'id': id})
+        if api_client.delete(comment_form):
+            return redirect('/topic/' + request.POST.get('topic', "-empty-") + "/")
+        else:
+            message = "Failed to delete comment"
+            return redirect('/topic/' + request.POST.get('topic', "-empty-") + "/")
+
 
 @login_required
 def hide_comment(request, id):
-#    if request.POST:
+    if request.POST:
         comment_form = CommentForm(initial={'id': id})
         payload = {'is_hidden': True}
         if api_client.save(comment_form, method='PATCH', payload=payload):
-            redirect('/')
+            return redirect('/topic/' + request.POST.get('topic', "-empty-") + "/")
         else:
             message = "Failed ot save comment"
-        return redirect('/')
+        return redirect('/topic/' + request.POST.get('topic', "-empty-") + "/")
 
 def index(request):
     return render_to_response('forum/index.html', { 'form': SignupForm()},

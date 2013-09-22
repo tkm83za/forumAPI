@@ -54,3 +54,9 @@ def get(form, sub_url=None):
     resp = requests.get(url)
     data = resp.json()
     return data
+
+def delete(form, request=None):
+    url = "{}:{}{}/{}{}/".format(API_HOST, API_PORT, API_PATH, form.Meta.api_path, form.initial['id'])
+
+    return requests.delete(url,headers=HEADERS)
+    

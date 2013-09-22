@@ -31,5 +31,5 @@ class Comment(InheritableDocument):
     in_reply_to = mongoengine.StringField(max_length=50)#mongoengine.ReferenceField(Comment)
     comment_body = mongoengine.StringField(required=True)
     is_hidden = mongoengine.BooleanField()
-    
+    created = mongoengine.DateTimeField()
     
