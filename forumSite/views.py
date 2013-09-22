@@ -75,6 +75,34 @@ def newtopic(request):
         form = TopicForm()
     return render(request, 'forum/form.html', {"form": form})
 
+@login_required
+def edit_comment(request, id):
+    if request.POST:
+        comment_form = CommentForm(request.POST, initial={'id': id})
+        payload = {'comment_body': request.POST['comment_body']}
+        if api_client.save(comment_form, method='PATCH', payload=payload):
+            redirect('/')
+        else:
+            message = "Failed ot save comment"
+    skeleton = CommentForm(initial={'id': id})
+    comment = api_client.get(skeleton)
+    comment_form = CommentForm(initial={'comment_body':comment['comment_body']})
+    return render(request, 'forum/form.html', {'form': comment_form})
+    
+@login_required
+def delete_comment(request, id):
+    pass
+
+@login_required
+def hide_comment(request, id):
+#    if request.POST:
+        comment_form = CommentForm(initial={'id': id})
+        payload = {'is_hidden': True}
+        if api_client.save(comment_form, method='PATCH', payload=payload):
+            redirect('/')
+        else:
+            message = "Failed ot save comment"
+        return redirect('/')
 
 def index(request):
     return render_to_response('forum/index.html', { 'form': SignupForm()},

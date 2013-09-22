@@ -23,9 +23,12 @@ HEADERS = {'content-type': 'application/json'}
 
 logger = logging.getLogger("forumSite.forms")
 
-def save(form, method=None, request=None):
+def save(form, method=None, request=None, payload=None):
     url = "{}:{}{}/{}".format(API_HOST, API_PORT, API_PATH, form.Meta.api_path)
-    payload = form.to_dict(request=request)
+    if form.initial.get('id', None) is not None:
+        url = "{}:{}{}/{}{}/".format(API_HOST, API_PORT, API_PATH, form.Meta.api_path, form.initial['id'])
+    if not payload:
+        payload = form.to_dict(request=request)
 
     if method == None:
         if payload.get('id', False):
@@ -35,7 +38,7 @@ def save(form, method=None, request=None):
     logger.error("%s: %s, %s" % (method, url, json.dumps(payload)))
     if not REQUEST_METHODS[method]:
         logger.debug("Exception raised!")
-        raise Exception("Invalid reequest method: %s" % method)
+        raise Exception("Invalid request method: %s" % method)
 
     logger.debug("%s: %s" % (method, url))
     return REQUEST_METHODS[method](url, data=json.dumps(payload), headers=HEADERS)
@@ -45,7 +48,6 @@ def get(form, sub_url=None):
         url = "{}:{}{}/{}".format(API_HOST, API_PORT, API_PATH, form.Meta.api_path)
         if form.initial.get('id', None) is not None:
             url = "{}:{}{}/{}{}/".format(API_HOST, API_PORT, API_PATH, form.Meta.api_path, form.initial['id'])
-            pass
     else:
         url = "{}:{}{}/{}".format(API_HOST, API_PORT, API_PATH, sub_url)
     logger.debug("GET: %s" % url)
