@@ -51,22 +51,23 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li><a href="/comments">My Comments</a></li>
             <li><a href="/topics">Latest Topics</a></li>
+            {% if user.is_authenticated %}
+            <li><a href="/comments">My Comments</a></li>
             <li class="dropdown">
               <a href="/topics" class="dropdown-toggle" data-toggle="dropdown">Topics <b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li><a href="/topics/">See latest Topics</a></li>
                 <li><a href="/submit/topic">Submit new Topic</a></li>
             </ul>
+            {% endif %}
             </li>
           </ul>
           {% if user.is_authenticated %}
-          <ul class="navbar-right">
-          <li>{{user.username}}</li>
-          <li><a class="btn btn-primary" href="/accounts/logout/">Logout</a></li>
-          </ul>
-          {% else %}
+          <div class="navbar-form navbar-right">
+              <div class="form-group"><a href="#">{{user.username}}</a></div>
+              <div class="form-group"><a class="btn btn-primary" href="/accounts/logout/">Logout</a></div>
+          </div>
+        {% else %}
           <form class="navbar-form navbar-right" action="/accounts/login/" method="post">
               {%  csrf_token %}
             <div class="form-group">
