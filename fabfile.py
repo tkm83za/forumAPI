@@ -57,5 +57,5 @@ def deploy():
     """ Deploy Django Project.
     """
     update_django_project()
-    put("build/server_settings.py", "/home/ubuntu/git/forumAPI/forumAPI/local_settings.py")
+    put("build/server_settings.py", "/home/ubuntu/git/forumAPI/forumAPI/settings_local.py")
     restart_webserver()
