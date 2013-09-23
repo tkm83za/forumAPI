@@ -170,6 +170,12 @@ class RegistrationProfile(User):
         return registration_profile
 
     @classmethod
+    def create_active_user(cls, username, password, email, send_email=True):
+        profile = cls.create_inactive_user(username, password, email, send_email=False)
+        profile.is_active = True
+        profile.save()
+
+    @classmethod
     def create_user(cls, *args, **kwargs):
         """
         Create a ``RegistrationProfile`` for a given
