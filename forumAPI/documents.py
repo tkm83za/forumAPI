@@ -15,10 +15,10 @@ class InheritableEmbeddedDocument(mongoengine.EmbeddedDocument):
     
 class User(mongoengine.Document):
     email = mongoengine.EmailField(required=True, unique=True)
-    is_admin = mongoengine.BooleanField()
-    first_name = mongoengine.StringField(max_length=50)
-    last_name = mongoengine.StringField(max_length=50)
-    username = mongoengine.StringField(max_length=50)
+    username = mongoengine.StringField(required=True, max_length=50)
+    is_admin = mongoengine.BooleanField(default=False)
+#     first_name = mongoengine.StringField(max_length=50)
+#     last_name = mongoengine.StringField(max_length=50)
 
 class Topic(InheritableDocument):
     author = mongoengine.ReferenceField(User, dbref=False)
