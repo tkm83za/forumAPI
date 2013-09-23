@@ -4,7 +4,7 @@ forumAPI
 ##API Documentation##
 The API is root is accessible via /api/v1/\<resourcetype\>/(id/)
 
-Register User:
+####Register User####
 * URL: http://\<server\>:\<server\>/api/v1/register/
 * JSON fields: 
  * **email**: string
@@ -14,19 +14,19 @@ Register User:
 * methods: POST
 * to add an admin user, set is_staff field to true
 
-User List:
+####User List####
 * operations on non-admin users
 * URL: http://\<server\>:\<server\>/api/v1/user/
 * methods: GET
 
-Non-admin user operations:
+####Non-admin user operations####
 * URL: http://\<server\>:\<server\>/api/v1/user/\<id\>/
 * fields: 
  * email: string
  * username: string
 * methods: GET, PATCH, DELETE
 
-Admin User List:
+####Admin User List####
 * gets a list of admin users (have is_staff=true)
 * URL: http://\<server\>:\<server\>/api/v1/adminuser/
 * fields: 
@@ -34,7 +34,7 @@ Admin User List:
  * username: string
 * methods: GET
 
-Admin users operations:
+####Admin users operations####
 * URL: http://\<server\>:\<server\>/api/v1/adminuser/\<id\>/
 * fields:
  * email: string
@@ -42,7 +42,11 @@ Admin users operations:
 * methods: GET, PATCH, DELETE
 
 
-Topic:
+####Topic List####
+* URL: http://\<server\>:\<port\>/api/v1/topic/
+* methods: GET
+
+####Topic List####
 * URL: http://\<server\>:\<port\>/api/v1/topic/(id/)
 * fields: 
  * **name**:string
@@ -50,13 +54,13 @@ Topic:
 * methods: GET, POST, PUT, PATCH, DELETE
 
 
-Topic's comment:
+####Retrieve Topic's comment####
 * retrieves all the comments associated with a topic
 * URL: http://\<server\>:\<port\>/api/v1/topic/\<id\>/comments/
 * methods: GET
 
 
-Comment:
+####Comment####
 * URL: http://\<server\>:\<port\>/api/v1/comment/
 * fields: 
  *  **comment_body**: string
