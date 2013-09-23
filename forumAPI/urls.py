@@ -18,6 +18,7 @@ v1_api.register(AdminUserResource())
 
 
 urlpatterns = patterns('',
+    (r'^accounts/profile/$', 'forumSite.views.index'),
     (r'^accounts/', include('registration.urls')),
     (r'^api/', include(v1_api.urls)),
     ('^admin/', include(admin.site.urls)),
