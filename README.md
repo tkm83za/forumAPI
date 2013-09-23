@@ -5,7 +5,7 @@ forumAPI
 The API is root is accessible via /api/v1/\<resourcetype\>/(id/)
 
 ####Register User####
-* URL: http://\<server\>:\<server\>/api/v1/register/
+* URL: **http://\<server\>/api/v1/register/**
 * JSON fields: 
  * **email**: string
  * **username**: string
@@ -16,11 +16,11 @@ The API is root is accessible via /api/v1/\<resourcetype\>/(id/)
 
 ####User List####
 * operations on non-admin users
-* URL: http://\<server\>:\<server\>/api/v1/user/
+* URL: **http://\<server\>/api/v1/user/**
 * methods: GET
 
 ####Non-admin user operations####
-* URL: http://\<server\>:\<server\>/api/v1/user/\<id\>/
+* URL: **http://\<server\>/api/v1/user/\<id\>/**
 * fields: 
  * email: string
  * username: string
@@ -28,14 +28,14 @@ The API is root is accessible via /api/v1/\<resourcetype\>/(id/)
 
 ####Admin User List####
 * gets a list of admin users (have is_staff=true)
-* URL: http://\<server\>:\<server\>/api/v1/adminuser/
+* URL: **http://\<server\>/api/v1/adminuser/**
 * fields: 
  * email:string
  * username: string
 * methods: GET
 
 ####Admin users operations####
-* URL: http://\<server\>:\<server\>/api/v1/adminuser/\<id\>/
+* URL: **http://\<server\>/api/v1/adminuser/\<id\>/**
 * fields:
  * email: string
  * username: string
@@ -43,11 +43,11 @@ The API is root is accessible via /api/v1/\<resourcetype\>/(id/)
 
 
 ####Topic List####
-* URL: http://\<server\>:\<port\>/api/v1/topic/
+* URL: **http://\<server\>/api/v1/topic/**
 * methods: GET
 
 ####Topic List####
-* URL: http://\<server\>:\<port\>/api/v1/topic/(id/)
+* URL: **http://\<server\>/api/v1/topic/(id/)**
 * fields: 
  * **name**:string
  * blurb:string
@@ -56,12 +56,12 @@ The API is root is accessible via /api/v1/\<resourcetype\>/(id/)
 
 ####Retrieve Topic's comment####
 * retrieves all the comments associated with a topic
-* URL: http://\<server\>:\<port\>/api/v1/topic/\<id\>/comments/
+* URL: **http://\<server\>/api/v1/topic/\<id\>/comments/**
 * methods: GET
 
 
 ####Comment####
-* URL: http://\<server\>:\<port\>/api/v1/comment/
+* URL: **http://\<server\>/api/v1/comment/**
 * fields: 
  *  **comment_body**: string
  *  **topic**: string _(href to topic)_
