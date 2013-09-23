@@ -56,12 +56,7 @@
           <ul class="nav navbar-nav">
             <li><a href="/topics">Latest Topics</a></li>
             {% if user.is_authenticated %}
-            <li><a href="/comments">My Comments</a></li>
-            <li class="dropdown">
-              <a href="/topics" class="dropdown-toggle" data-toggle="dropdown">Topics <b class="caret"></b></a>
-              <ul class="dropdown-menu">
                 <li><a href="/submit/topic">Submit new Topic</a></li>
-            </ul>
             {% endif %}
             </li>
           </ul>
