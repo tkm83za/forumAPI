@@ -19,19 +19,13 @@ from django.http.response import HttpResponse
 logger = logging.getLogger(__name__)
 
 def signup(request):
-    user = request.user
-    form = None
-    if request.method == 'POST':
+    form = SignupForm()
+    if request.POST:
         form = SignupForm(request.POST)
         if form.is_valid() and form.save():
-            redirect('/welcome')
-        elif form.is_valid():
-            form.non_field_errors = "Failed to save"
-        else:
-            form.non_field_errors = 'form is not valid'
-    else:
-        form = SignupForm()
-    return render(request, 'registration/registration_form.html', {"form": form})
+            return render(request, "registration/registration_complete.html")
+    return render(request, "registration/registration_form.html", {"form": form},
+                  context_instance=RequestContext(request))
 
 def topics(request):
     topic = TopicForm()
@@ -83,7 +77,7 @@ def newtopic(request):
     if request.method == 'POST':
         form = TopicForm(request.POST)
         if form.is_valid() and form.save():
-            redirect('/')
+            return redirect('/topics/')
         elif form.is_valid():
             form.non_field_errors = "Failed to save"
         else:

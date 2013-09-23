@@ -8,6 +8,7 @@ from forumAPI import documents
 from django.conf.urls import url
 from tastypie.utils.urls import trailing_slash
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import IntegrityError
 
 class CommentResource(resources.MongoEngineResource):
     topic =  fields.ReferenceField(to='forumAPI.api.TopicResource', attribute='topic', full=False)
@@ -51,14 +52,34 @@ class TopicResource(resources.MongoEngineResource):
 
 class UserResource(resources.MongoEngineResource):
     class Meta:
-        queryset = documents.User.objects.filter(is_admin__ne=True)
-        allowed_methods = ('get', 'post', 'put', 'patch', 'delete')
+        queryset = documents.User.objects.filter(is_staff__ne=True)
+        allowed_methods = ('get', 'patch', 'delete')
         authorization = authorization.Authorization() #TODO: own-submission authorization for get, put, patch, delete any for post
         excludes = ['is_admin', 'password']
 
 class AdminUserResource(resources.MongoEngineResource):
     class Meta:
-        queryset = documents.User.objects.filter(is_admin=True)
+        queryset = documents.User.objects.filter(is_staff=True)
         allowed_methods = ('get', 'post', 'put', 'patch', 'delete')
         authorization = authorization.Authorization() #TODO: admin-only authorization
         excludes = ['is_admin', 'password']
+
+class CreateUserResource(resources.MongoEngineResource):
+    class Meta:
+        allowed_methods = ['post']
+        object_class = mongoengine.django.auth.User
+        #authentication = Authentication()
+        authorization = authorization.Authorization()
+        resource_name = 'register'
+
+        include_resource_uri = False
+        fields = ['username','password','email', 'is_admin']
+
+    def obj_create(self, bundle, request=None, **kwargs):
+        try:
+            bundle = super(CreateUserResource, self).obj_create(bundle, **kwargs)
+            bundle.obj.set_password(bundle.data.get('password'))
+            bundle.obj.save()
+        except IntegrityError:
+            raise resources.BadRequest('That username already exists')
+        return bundle

@@ -36,12 +36,12 @@ class UserForm(ApiForm):
 class SignupForm(UserForm):
     
     class Meta(UserForm.Meta):
-        fields = ('email', 'first_name')
+        api_path = "register/"
+        fields = ('email', 'username')
     def to_dict(self, request=None):
         my_vals = {
                     'email': self.cleaned_data.get('email', ''),
-                    'first_name': self.cleaned_data.get('first_name', ''),
-                    'last_name': self.cleaned_data.get('last_name', None),
+                    'username': self.cleaned_data.get('username', ''),
                     'password': self.cleaned_data.get('password', None),
                     'id': self.cleaned_data.get('id', None)
                   }
@@ -52,8 +52,7 @@ class SignupForm(UserForm):
         return my_vals
 
     email = forms.EmailField(required = True)
-    first_name = forms.CharField(max_length=50)
-    last_name = forms.CharField(max_length=50, required=False)
+    username = forms.CharField(max_length=50)
     password1 = forms.CharField(widget=forms.PasswordInput(render_value=False),
                                 label=_("Password"))
     password2 = forms.CharField(widget=forms.PasswordInput(render_value=False),
@@ -67,6 +66,7 @@ class SignupForm(UserForm):
         if 'password1' in self.cleaned_data and 'password2' in self.cleaned_data:
             if self.cleaned_data['password1'] != self.cleaned_data['password2']:
                 raise forms.ValidationError("The two password fields didn't match.")
+            self.cleaned_data['password'] = self.cleaned_data['password1']
         return self.cleaned_data    
 
 class TopicForm(ApiForm):

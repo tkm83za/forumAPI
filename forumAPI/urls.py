@@ -6,7 +6,7 @@ from django.conf.urls.static import static
 from tastypie.api import Api
 
 from forumSite import urls as site_urls
-from forumAPI.api import TopicResource, CommentResource, UserResource, AdminUserResource
+from forumAPI.api import TopicResource, CommentResource, UserResource, AdminUserResource, CreateUserResource
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 v1_api = Api(api_name='v1')
@@ -14,7 +14,7 @@ v1_api.register(TopicResource())
 v1_api.register(CommentResource())
 v1_api.register(UserResource())
 v1_api.register(AdminUserResource())
-
+v1_api.register(CreateUserResource())
 
 
 urlpatterns = patterns('',

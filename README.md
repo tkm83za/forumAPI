@@ -5,12 +5,15 @@ API Documentation
 ----
 The API is root is accessible via /api/v1/\<resourcetype\>/(id/)
 
+Register User:
+* URL: http://\<server\>:\<server\>/api/v1/register/
+* JSON fields: *email:string, *username: string, *password:string, is_staff:boolean (optional. defaults to false)
+* methods: POST
 
 User:
 * URL: http://\<server\>:\<server\>/api/v1/user/
-* fields: *email:string, first_name: string, last_name:string
-* methods: GET, POST, PUT, PATCH, DELETE
-* 
+* fields: *email:string, username: string
+* methods: GET, PATCH, DELETE
 
 
 Topic:
